@@ -1,9 +1,9 @@
-import { FC } from 'react'
-import { useCalculator } from '../../hooks/useCalculator'
-import styles from './CalculatorButton.module.css'
+import { FC } from 'react';
+import { useCalculator } from '../../providers/CalculatorProvider';
+import styles from './CalculatorButton.module.css';
 
 interface CalculatorButtonProps {
-	label: string
+	label: string;
 }
 
 const CalculatorButton: FC<CalculatorButtonProps> = ({ label }) => {
@@ -13,32 +13,32 @@ const CalculatorButton: FC<CalculatorButtonProps> = ({ label }) => {
 		handleClear,
 		handleReverseNumber,
 		handlePercent
-	} = useCalculator()
+	} = useCalculator();
 
 	const handleClick = () => {
 		switch (label) {
 			case '=':
-				handleCalculate()
-				break
+				handleCalculate();
+				break;
 			case '+/-':
-				handleReverseNumber()
-				break
+				handleReverseNumber();
+				break;
 			case '%':
-				handlePercent()
-				break
+				handlePercent();
+				break;
 			case 'AC':
-				handleClear()
-				break
+				handleClear();
+				break;
 			default:
-				handleButtonClick(label)
+				handleButtonClick(label);
 		}
-	}
+	};
 
 	return (
 		<button onClick={handleClick} className={styles.button}>
 			{label}
 		</button>
-	)
-}
+	);
+};
 
-export default CalculatorButton
+export default CalculatorButton;

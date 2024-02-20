@@ -1,9 +1,9 @@
-import { FC } from 'react'
-import { useCalculator } from '../../hooks/useCalculator'
-import styles from './CalculatorDisplay.module.css'
+import { FC } from 'react';
+import { useCalculator } from '../../providers/CalculatorProvider';
+import styles from './CalculatorDisplay.module.css';
 
 const CalculatorDisplay: FC = () => {
-	const { input } = useCalculator()
+	const { input } = useCalculator();
 
 	return (
 		<div>
@@ -15,7 +15,7 @@ const CalculatorDisplay: FC = () => {
 				className={styles.display}
 			/>
 		</div>
-	)
-}
+	);
+};
 
-export default CalculatorDisplay
+export default CalculatorDisplay;
