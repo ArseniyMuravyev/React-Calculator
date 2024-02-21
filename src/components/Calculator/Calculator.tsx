@@ -1,5 +1,5 @@
-import CalculatorButton from '../CalculatorButton/CalculatorButton';
-import CalculatorDisplay from '../CalculatorDisplay/CalculatorDisplay';
+import { CalculatorButton } from '../CalculatorButton/CalculatorButton';
+import { CalculatorDisplay } from '../CalculatorDisplay/CalculatorDisplay';
 import styles from './Calculator.module.css';
 
 const calculatorButtons = [
@@ -10,7 +10,7 @@ const calculatorButtons = [
 	'7',
 	'8',
 	'9',
-	'*',
+	'×',
 	'4',
 	'5',
 	'6',
@@ -24,7 +24,7 @@ const calculatorButtons = [
 	'='
 ];
 
-const Calculator = () => {
+export const Calculator = () => {
 	return (
 		<div className={styles.calculator}>
 			<CalculatorDisplay />
@@ -36,5 +36,3 @@ const Calculator = () => {
 		</div>
 	);
 };
-
-export default Calculator;

@@ -8,6 +8,7 @@
 }
 
 .buttons {
+	margin-top: 10px;
 	display: grid;
 	grid-template-columns: repeat(4, 64px);
 	gap: 12px;

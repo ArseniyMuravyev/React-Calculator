@@ -1,21 +1,16 @@
 import { FC } from 'react';
+import { Textfit } from 'react-textfit';
 import { useCalculator } from '../../providers/CalculatorProvider';
 import styles from './CalculatorDisplay.module.css';
 
-const CalculatorDisplay: FC = () => {
-	const { input } = useCalculator();
+export const CalculatorDisplay: FC = () => {
+	const { calc } = useCalculator();
 
 	return (
 		<div>
-			<input
-				type='text'
-				value={input}
-				placeholder='0'
-				readOnly
-				className={styles.display}
-			/>
+			<Textfit className={styles.display} max={50} mode='single'>
+				{calc.number ? calc.number : calc.result}
+			</Textfit>
 		</div>
 	);
 };
-
-export default CalculatorDisplay;

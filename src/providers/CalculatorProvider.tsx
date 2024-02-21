@@ -1,13 +1,14 @@
-import { evaluate } from 'mathjs';
 import { FC, ReactNode, createContext, useContext, useState } from 'react';
 
+type Calc = {
+	sign: string;
+	number: number;
+	result: number;
+};
+
 interface ICalculatorContext {
-	input: string;
-	handleButtonClick: (value: string) => void;
-	handleReverseNumber: () => void;
-	handleClear: () => void;
-	handleCalculate: () => void;
-	handlePercent: () => void;
+	calc: Calc;
+	setCalc: React.Dispatch<React.SetStateAction<Calc>>;
 }
 
 interface CalculatorProviderProps {
@@ -29,49 +30,19 @@ export const useCalculator = () => {
 export const CalculatorProvider: FC<CalculatorProviderProps> = ({
 	children
 }) => {
-	const [input, setInput] = useState<string>('');
+	const [calc, setCalc] = useState({
+		sign: '',
+		number: 0,
+		result: 0
+	});
 
-	const handleButtonClick = (value: string) => {
-		setInput(prevInput => {
-			return prevInput + value;
-		});
-	};
-
-	const handleClear = () => {
-		setInput('');
-	};
-
-	const handleReverseNumber = () => {
-		setInput(prevInput => {
-			return (parseFloat(prevInput) * -1).toString();
-		});
-	};
-
-	const handlePercent = () => {
-		setInput(prevInput => {
-			return (parseFloat(prevInput) / 100).toString();
-		});
-	};
-
-	const handleCalculate = () => {
-		try {
-			setInput(evaluate(input).toString());
-		} catch (error) {
-			setInput('Error');
-		}
-	};
-
-	const value: ICalculatorContext = {
-		input,
-		handleButtonClick,
-		handleClear,
-		handleCalculate,
-		handleReverseNumber,
-		handlePercent
+	const providerValue: ICalculatorContext = {
+		calc,
+		setCalc
 	};
 
 	return (
-		<CalculatorContext.Provider value={value}>
+		<CalculatorContext.Provider value={providerValue}>
 			{children}
 		</CalculatorContext.Provider>
 	);

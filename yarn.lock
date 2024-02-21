@@ -152,6 +152,13 @@
   dependencies:
     "@types/react" "*"
 
+"@types/react-textfit@^1.1.4":
+  version "1.1.4"
+  resolved "http://npm.prakticum-team.ru/@types/react-textfit/-/react-textfit-1.1.4.tgz"
+  integrity sha512-tj3aMfbzi12r2yWn4Kzm9IkEHz7uaBU57P19FhzEA+Sr+ex0EuJezAYtBRMW3HjxylJ8PtmwpWgPT/t+j0H6zA==
+  dependencies:
+    "@types/react" "*"
+
 "@types/react@*", "@types/react@^18.2.43":
   version "18.2.48"
   resolved "http://npm.prakticum-team.ru/@types/react/-/react-18.2.48.tgz"
