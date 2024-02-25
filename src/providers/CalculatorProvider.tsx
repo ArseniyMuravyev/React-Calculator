@@ -1,31 +1,31 @@
-import { FC, ReactNode, createContext, useContext, useState } from 'react';
+import { FC, ReactNode, createContext, useContext, useState } from 'react'
 
-type Calc = {
-	sign: string;
-	number: number;
-	result: number;
-};
+type Calculator = {
+	sign: string
+	number: number
+	result: number
+}
 
 interface ICalculatorContext {
-	calc: Calc;
-	setCalc: React.Dispatch<React.SetStateAction<Calc>>;
+	calc: Calculator
+	setCalc: React.Dispatch<React.SetStateAction<Calculator>>
 }
 
 interface CalculatorProviderProps {
-	children: ReactNode;
+	children: ReactNode
 }
 
 export const CalculatorContext = createContext<ICalculatorContext | undefined>(
 	undefined
-);
+)
 
 export const useCalculator = () => {
-	const context = useContext(CalculatorContext);
+	const context = useContext(CalculatorContext)
 	if (!context) {
-		throw new Error('Error');
+		throw new Error('Error')
 	}
-	return context;
-};
+	return context
+}
 
 export const CalculatorProvider: FC<CalculatorProviderProps> = ({
 	children
@@ -34,16 +34,16 @@ export const CalculatorProvider: FC<CalculatorProviderProps> = ({
 		sign: '',
 		number: 0,
 		result: 0
-	});
+	})
 
 	const providerValue: ICalculatorContext = {
 		calc,
 		setCalc
-	};
+	}
 
 	return (
 		<CalculatorContext.Provider value={providerValue}>
 			{children}
 		</CalculatorContext.Provider>
-	);
-};
+	)
+}

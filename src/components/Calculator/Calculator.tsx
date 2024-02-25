@@ -1,6 +1,6 @@
-import { CalculatorButton } from '../CalculatorButton/CalculatorButton';
-import { CalculatorDisplay } from '../CalculatorDisplay/CalculatorDisplay';
-import styles from './Calculator.module.css';
+import { CalculatorButton } from '../CalculatorButton/CalculatorButton'
+import { CalculatorDisplay } from '../CalculatorDisplay/CalculatorDisplay'
+import styles from './Calculator.module.css'
 
 const calculatorButtons = [
 	'AC',
@@ -22,7 +22,7 @@ const calculatorButtons = [
 	'0',
 	'.',
 	'='
-];
+]
 
 export const Calculator = () => {
 	return (
@@ -34,5 +34,5 @@ export const Calculator = () => {
 				))}
 			</div>
 		</div>
-	);
-};
+	)
+}

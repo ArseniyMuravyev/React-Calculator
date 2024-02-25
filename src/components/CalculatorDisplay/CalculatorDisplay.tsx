@@ -1,10 +1,10 @@
-import { FC } from 'react';
-import { Textfit } from 'react-textfit';
-import { useCalculator } from '../../providers/CalculatorProvider';
-import styles from './CalculatorDisplay.module.css';
+import { FC } from 'react'
+import { Textfit } from 'react-textfit'
+import { useCalculator } from '../../providers/CalculatorProvider'
+import styles from './CalculatorDisplay.module.css'
 
 export const CalculatorDisplay: FC = () => {
-	const { calc } = useCalculator();
+	const { calc } = useCalculator()
 
 	return (
 		<div>
@@ -12,5 +12,5 @@ export const CalculatorDisplay: FC = () => {
 				{calc.number ? calc.number : calc.result}
 			</Textfit>
 		</div>
-	);
-};
+	)
+}
