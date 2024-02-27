@@ -1,48 +1,44 @@
 import { FC, ReactNode, createContext, useContext, useState } from 'react'
 
-type Calculator = {
+type CalculatorState = {
 	sign: string
 	number: number
 	result: number
 }
 
-interface ICalculatorContext {
-	calc: Calculator
-	setCalc: React.Dispatch<React.SetStateAction<Calculator>>
+interface CalculatorContextType {
+	calc: CalculatorState
+	setCalc: React.Dispatch<React.SetStateAction<CalculatorState>>
 }
 
-interface CalculatorProviderProps {
-	children: ReactNode
-}
-
-export const CalculatorContext = createContext<ICalculatorContext | undefined>(
-	undefined
-)
+export const CalculatorContext = createContext<
+	CalculatorContextType | undefined
+>(undefined)
 
 export const useCalculator = () => {
 	const context = useContext(CalculatorContext)
 	if (!context) {
-		throw new Error('Error')
+		throw new Error('useCalculator must be used within a CalculatorProvider')
 	}
 	return context
 }
 
-export const CalculatorProvider: FC<CalculatorProviderProps> = ({
+export const CalculatorProvider: FC<{ children: ReactNode }> = ({
 	children
 }) => {
-	const [calc, setCalc] = useState({
+	const [calc, setCalc] = useState<CalculatorState>({
 		sign: '',
 		number: 0,
 		result: 0
 	})
 
-	const providerValue: ICalculatorContext = {
+	const contextValue: CalculatorContextType = {
 		calc,
 		setCalc
 	}
 
 	return (
-		<CalculatorContext.Provider value={providerValue}>
+		<CalculatorContext.Provider value={contextValue}>
 			{children}
 		</CalculatorContext.Provider>
 	)
