@@ -1,14 +1,17 @@
-import { FC, ReactNode, createContext, useContext, useState } from 'react'
-
-type CalculatorState = {
-	sign: string
-	number: number
-	result: number
-}
+import {
+	Dispatch,
+	FC,
+	ReactNode,
+	createContext,
+	useContext,
+	useReducer,
+} from 'react'
+import { calculatorReducer } from '../components/Calculator/Calculator'
+import { Action, CalculatorState } from '../types'
 
 interface CalculatorContextType {
 	calc: CalculatorState
-	setCalc: React.Dispatch<React.SetStateAction<CalculatorState>>
+	dispatch: Dispatch<Action>
 }
 
 export const CalculatorContext = createContext<
@@ -18,27 +21,22 @@ export const CalculatorContext = createContext<
 export const useCalculator = () => {
 	const context = useContext(CalculatorContext)
 	if (!context) {
-		throw new Error('useCalculator must be used within a CalculatorProvider')
+		throw new Error('error')
 	}
 	return context
 }
 
 export const CalculatorProvider: FC<{ children: ReactNode }> = ({
-	children
+	children,
 }) => {
-	const [calc, setCalc] = useState<CalculatorState>({
+	const [calc, dispatch] = useReducer(calculatorReducer, {
 		sign: '',
 		number: 0,
-		result: 0
+		result: 0,
 	})
 
-	const contextValue: CalculatorContextType = {
-		calc,
-		setCalc
-	}
-
 	return (
-		<CalculatorContext.Provider value={contextValue}>
+		<CalculatorContext.Provider value={{ calc, dispatch }}>
 			{children}
 		</CalculatorContext.Provider>
 	)

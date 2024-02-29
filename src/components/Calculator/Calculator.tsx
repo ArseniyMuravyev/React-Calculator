@@ -1,8 +1,8 @@
 import { FC } from 'react'
+import { Action, CalculatorState, Operation } from '../../types'
 import { CalculatorButton } from '../CalculatorButton/CalculatorButton'
 import { CalculatorDisplay } from '../CalculatorDisplay/CalculatorDisplay'
 import styles from './Calculator.module.css'
-import { useCalculator } from '../../providers/CalculatorProvider'
 
 const calculatorButtons = [
 	'AC',
@@ -23,112 +23,73 @@ const calculatorButtons = [
 	'+',
 	'0',
 	'.',
-	'='
+	'=',
 ]
 
-export const Calculator: FC = () => {
-	const { calc, setCalc } = useCalculator()
+export const math: Record<string, Operation> = {
+	'+': (result, number) => result + number,
+	'-': (result, number) => result - number,
+	'×': (result, number) => result * number,
+	'/': (result, number) => result / number,
+}
 
-	const handleComma = () => {
-		if (calc.number.toString().indexOf('.') === -1) {
-			setCalc({
-				...calc,
+export const calculatorReducer = (
+	state: CalculatorState,
+	action: Action
+): CalculatorState => {
+	switch (action.type) {
+		case 'DIGIT':
+			return {
+				...state,
+				number: Number(state.number.toString() + action.payload),
+			}
+		case 'HANDLE_ACTION':
+			if (action.payload === 'AC') {
+				return { sign: '', number: 0, result: 0 }
+			}
+
+			if (['+', '-', '×', '/'].includes(action.payload)) {
+				return {
+					sign: action.payload,
+					number: 0,
+					result: state.number,
+				}
+			}
+
+			if (action.payload === '=') {
+				const newResult = math[state.sign](state.result, state.number)
+				return {
+					...state,
+					number: newResult,
+					result: newResult,
+				}
+			}
+
+			if (action.payload === '+/-') {
+				return { ...state, number: -state.number }
+			}
+
+			if (action.payload === '%') {
+				return { ...state, number: state.number / 100 }
+			}
+
+			if (action.payload === '.' && !state.number.toString().includes('.')) {
 				// @ts-ignore
-				number: calc.number.toString() + '.'
-			})
-		}
+				return { ...state, number: state.number.toString() + '.' }
+			}
+			return state
+		default:
+			return state
 	}
+}
 
-	const handleClear = () => {
-		setCalc({ sign: '', number: 0, result: 0 })
-	}
-
-	const handleButtonClick = (label: string) => {
-		let numberValue
-		if (label === '0' && calc.number === 0) {
-			numberValue = '0'
-		} else {
-			numberValue = Number(calc.number + label)
-		}
-
-		setCalc({
-			...calc,
-			number: Number(numberValue)
-		})
-	}
-
-	const handleSign = (label: string) => {
-		setCalc({
-			sign: label,
-			number: 0,
-			result: !calc.result && calc.number ? calc.number : calc.result
-		})
-	}
-
-	const math = (a: number, b: number, sign: string) => {
-		const result: { [key: string]: (a: number, b: number) => number } = {
-			'+': (a, b) => a + b,
-			'×': (a, b) => a * b,
-			'-': (a, b) => a - b,
-			'/': (a, b) => a / b
-		}
-		return result[sign](a, b)
-	}
-
-	const handleEquals = () => {
-		if (calc.result && calc.number) {
-			setCalc(prev => ({
-				sign: prev.sign,
-				number: 0,
-				result: math(calc.result, calc.number, calc.sign)
-			}))
-		}
-	}
-
-	const handlePercent = () => {
-		setCalc({
-			sign: '',
-			number: calc.number / 100,
-			result: calc.result / 100
-		})
-	}
-
-	const handleInvert = () => {
-		setCalc({
-			sign: '',
-			number: calc.number ? calc.number * -1 : 0,
-			result: calc.result ? calc.result * -1 : 0
-		})
-	}
-
-	const handleClick = (label: string) => {
-		if (label === '.') {
-			handleComma()
-		} else if (label === 'AC') {
-			handleClear()
-		} else if (['/', '×', '-', '+'].includes(label)) {
-			handleSign(label)
-		} else if (label === '=') {
-			handleEquals()
-		} else if (label === '%') {
-			handlePercent()
-		} else if (label === '+/-') {
-			handleInvert()
-		} else {
-			handleButtonClick(label)
-		}
-	}
-
+export const Calculator: FC = () => {
 	return (
 		<div className={styles.calculator}>
 			<CalculatorDisplay />
 			<div className={styles.buttons}>
-				{calculatorButtons.map((label, index) => (
-					<CalculatorButton
-						key={index}
-						label={label}
-						onClick={() => handleClick(label)}
-					/>
+				{calculatorButtons.map(label => (
+					<CalculatorButton key={label} label={label} />
 				))}
 			</div>
 		</div>
