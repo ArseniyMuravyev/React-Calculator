@@ -1,17 +1,19 @@
-export type CalculatorState = {
-	sign: string
-	number: number
-	result: number
-}
-
-export type DigitAction = {
+type DigitAction = {
 	type: 'DIGIT'
 	payload: number
 }
 
-export type HandleAction = {
+type HandleAction = {
 	type: 'HANDLE_ACTION'
 	payload: string
+}
+
+export type CalculatorState = {
+	lastOperation?: string
+	lastOperand?: number
+	acc?: number
+	display: number | string 
+	newOperandFlag?: boolean
 }
 
 export type Action = DigitAction | HandleAction

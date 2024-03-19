@@ -30,9 +30,11 @@ export const CalculatorProvider: FC<{ children: ReactNode }> = ({
 	children,
 }) => {
 	const [calc, dispatch] = useReducer(calculatorReducer, {
-		sign: '',
-		number: 0,
-		result: 0,
+		lastOperation: undefined,
+		lastOperand: undefined,
+		acc: undefined,
+		display: 0,
+		newOperandFlag: false,
 	})
 
 	return (

@@ -9,7 +9,7 @@ export const CalculatorDisplay: FC = () => {
 	return (
 		<div>
 			<Textfit className={styles.display} max={50} mode='single'>
-				{calc.number ? calc.number : calc.result}
+				{calc.display}
 			</Textfit>
 		</div>
 	)

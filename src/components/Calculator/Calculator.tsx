@@ -8,7 +8,7 @@ const calculatorButtons = [
 	'AC',
 	'+/-',
 	'%',
-	'/',
+	'÷',
 	'7',
 	'8',
 	'9',
@@ -27,10 +27,10 @@ const calculatorButtons = [
 ]
 
 export const math: Record<string, Operation> = {
-	'+': (result, number) => result + number,
-	'-': (result, number) => result - number,
-	'×': (result, number) => result * number,
-	'/': (result, number) => result / number,
+	'+': (firstOperand, secondOperand) => firstOperand + secondOperand,
+	'-': (firstOperand, secondOperand) => firstOperand - secondOperand,
+	'×': (firstOperand, secondOperand) => firstOperand * secondOperand,
+	'÷': (firstOperand, secondOperand) => firstOperand / secondOperand,
 }
 
 export const calculatorReducer = (
@@ -38,44 +38,64 @@ export const calculatorReducer = (
 	action: Action
 ): CalculatorState => {
 	switch (action.type) {
-		case 'DIGIT':
-			return {
-				...state,
-				number: Number(state.number.toString() + action.payload),
+		case 'DIGIT': {
+			if (state.newOperandFlag) {
+				return {
+					...state,
+					display: Number(action.payload),
+					newOperandFlag: false,
+				}
+			} else {
+				return {
+					...state,
+					display: Number(state.display.toString() + action.payload),
+				}
 			}
+		}
 		case 'HANDLE_ACTION':
 			if (action.payload === 'AC') {
-				return { sign: '', number: 0, result: 0 }
+				return {
+					lastOperation: undefined,
+					lastOperand: undefined,
+					display: 0,
+				}
 			}
 
-			if (['+', '-', '×', '/'].includes(action.payload)) {
+			if (['+', '-', '×', '÷'].includes(action.payload)) {
 				return {
-					sign: action.payload,
-					number: 0,
-					result: state.number,
+					lastOperation: action.payload,
+					acc: Number(state.display),
+					display: state.display,
+					newOperandFlag: true,
 				}
 			}
 
 			if (action.payload === '=') {
-				const newResult = math[state.sign](state.result, state.number)
-				return {
-					...state,
-					number: newResult,
-					result: newResult,
+				const tmp = Number(state.lastOperand ?? state.display)
+				if (state.lastOperation && tmp && state.acc) {
+					const newDisplay = math[state.lastOperation](state.acc, tmp)
+					return {
+						...state,
+						lastOperand: tmp,
+						acc: newDisplay,
+						display: newDisplay,
+					}
 				}
 			}
 
 			if (action.payload === '+/-') {
-				return { ...state, number: -state.number }
+				return { ...state, display: -state.display }
 			}
 
 			if (action.payload === '%') {
-				return { ...state, number: state.number / 100 }
+				return { ...state, display: Number(state.display) / 100 }
 			}
 
-			if (action.payload === '.' && !state.number.toString().includes('.')) {
-				// @ts-ignore
-				return { ...state, number: state.number.toString() + '.' }
+			if (action.payload === '.' && !state.display.toString().includes('.')) {
+				return {
+					...state,
+					display: state.display.toString() + '.',
+				}
 			}
 			return state
 		default:
